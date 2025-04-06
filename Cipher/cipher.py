@@ -1,31 +1,31 @@
-text = 'mrttaqrhknsw ih puggrur'
-custom_key = 'happycoding'
+text = "hi bro how is it going"
+custom_key = "Hello"
 
-def 
-(message, key, direction=1):
-    key_index = 0
-    alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    final_message = ''
-
-    for char in message.lower():
-
-            # Append any non-letter character to the message
-            if not char.isalpha():
+def vigenere(message, key, direction = 1):
+        key_index = 0
+        alphabet = "abcdefghijklmnopqrstuvwxyz"
+        final_message = ""
+        # We loop over each letter in the message (converted to lowercase just in case).
+        for char in message.lower() :
+            # If the character isn't a letter (like space or punctuation), just add it unchanged.
+            if not char.isalpha() :
                 final_message += char
-            else:        
-                # Find the right key character to encode/decode
+            else:
+                # Get the corresponding character from the key using the current key index.
                 key_char = key[key_index % len(key)]
+                # Increment the key index to move to the next character in the key.
                 key_index += 1
-
-                # Define the offset and the encrypted/decrypted letter
+                # Find the index of the current character in the alphabet.
                 offset = alphabet.index(key_char)
-                print(f'Offset: {offset}')
+                # Find the index of the current character in the alphabet.
                 index = alphabet.find(char)
-                new_index = (index + offset*direction) % len(alphabet)
+                # Calculate the new index by shifting the current index by the offset.
+                # The direction determines whether to encrypt (1) or decrypt (-1).
+                new_index = (index + offset * direction) % len(alphabet)
+                # Append the character at the new index to the final message.
                 final_message += alphabet[new_index]
-        
-    return final_message
-
+        # Return the final encrypted or decrypted message.
+        return  final_message
 def encrypt(message, key):
     return vigenere(message, key)
     
@@ -36,5 +36,3 @@ print(f'\nEncrypted text: {text}')
 print(f'Key: {custom_key}')
 decryption = decrypt(text, custom_key)
 print(f'\nDecrypted text: {decryption}\n')
-encrypt = encrypt(text, custom_key)
-print(f'Encrypted text: {encrypt}')
