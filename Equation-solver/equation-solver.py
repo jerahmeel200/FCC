@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import re
+
 
 class Equation(ABC):
     degree: int
@@ -28,10 +30,12 @@ class Equation(ABC):
             if n == 0:
                 terms.append(f'{coefficient:+}')
             elif n == 1:
-                terms.append(f'{coefficient:+}x')                
+                terms.append(f'{coefficient:+}x')
+            else:
+                terms.append(f"{coefficient:+}x**{n}")
         equation_string = ' '.join(terms) + ' = 0'
-        return equation_string.strip('+')        
-    
+        return re.sub(r"(?<!\d)1(?=x)", "", equation_string.strip("+"))        
+
     @abstractmethod
     def solve(self):
         pass
@@ -46,11 +50,39 @@ class LinearEquation(Equation):
     def solve(self):
         a, b = self.coefficients.values()
         x = -b / a
-        return x
+        return [x]
+
     def analyze(self):
         slope, intercept = self.coefficients.values()
         return {'slope': slope, 'intercept': intercept}
 
+class QuadraticEquation(Equation):
+    degree = 2
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        a, b, c = self.coefficients.values()
+        self.delta = b**2 - 4 * a * c
+
+    def solve(self):
+        if self.delta < 0:
+            return []
+        a, b, _ = self.coefficients.values()
+        x1 = (-b + (self.delta) ** 0.5) / (2 * a)
+        x2 = (-b - (self.delta) ** 0.5) / (2 * a)
+        if self.delta == 0:
+            return [x1]
+
+        return [x1, x2]
+    def analyze(self):
+        def analyze(self):
+            a, b, c = self.coefficients.values()
+            x = -b / (2 * a)
+            y = a * x**2 + b * x + c
+        
+        return {'x': x, 'y': y}
 lin_eq = LinearEquation(2, 3)
 print(lin_eq)
-print(lin_eq.solve())
+quadr_eq = QuadraticEquation(1, 2, 1)
+print(quadr_eq)
+print(quadr_eq.solve())
